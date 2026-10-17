@@ -170,17 +170,19 @@ section.block{padding:90px 0;position:relative}
 
 /* ---------- products ---------- */
 .products{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;padding:26px 0 80px}
-.pcard{--c:var(--sun);--cd:var(--sun-d);--cs:var(--sun-s);text-align:left;background:#fff;border-radius:var(--r-xl);padding:14px 14px 22px;border:2px solid var(--line);box-shadow:var(--sh);transition:transform .4s cubic-bezier(.3,1.5,.5,1),border-color .2s,box-shadow .3s;animation:rise .6s both;display:flex;flex-direction:column}
+.pcard{--c:var(--sun);--cd:var(--sun-d);--cs:var(--sun-s);text-align:left;background:#fff;border-radius:var(--r-xl);padding:0 0 22px;overflow:hidden;border:2px solid var(--line);box-shadow:var(--sh);transition:transform .4s cubic-bezier(.3,1.5,.5,1),border-color .2s,box-shadow .3s;animation:rise .6s both;display:flex;flex-direction:column}
 .pcard:hover{transform:translateY(-10px);border-color:var(--c);box-shadow:var(--sh-lg)}
-.pimg{position:relative;aspect-ratio:4/3;border-radius:22px;background:var(--cs);overflow:hidden;display:grid;place-items:center}
+.pimg{position:relative;aspect-ratio:4/3;border-radius:0;background:var(--cs);overflow:hidden;display:grid;place-items:center}
+.pimg:has(img)::before{display:none}
 .pimg::before{content:'';position:absolute;width:70%;aspect-ratio:1;border-radius:50%;background:#fff;opacity:.55;transition:transform .5s}
 .pcard:hover .pimg::before{transform:scale(1.15)}
-/* any image size fits automatically: contained, centred, never stretched */
-.pimg img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;object-position:center;padding:14px;transition:transform .5s cubic-bezier(.3,1.5,.5,1);filter:drop-shadow(0 14px 18px rgba(29,53,48,.18))}
+/* any image size fills the whole box: cropped to fit, centred, never stretched */
+.pimg img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;transition:transform .6s cubic-bezier(.2,.8,.2,1)}
 .pimg .emo{position:relative;font-size:92px;line-height:1;transition:transform .5s cubic-bezier(.3,1.5,.5,1);filter:drop-shadow(0 14px 14px rgba(29,53,48,.18))}
-.pcard:hover .pimg img,.pcard:hover .pimg .emo{transform:scale(1.07) rotate(-3deg)}
-.pimg .slot{position:absolute;z-index:2;top:12px;left:12px;background:#fff;border-radius:999px;padding:4px 12px;font-weight:800;font-size:12px;color:var(--cd)}
-.pcard .body{padding:16px 10px 0;display:flex;flex-direction:column;flex:1}
+.pcard:hover .pimg img{transform:scale(1.08)}
+.pcard:hover .pimg .emo{transform:scale(1.07) rotate(-3deg)}
+.pimg .slot{position:absolute;z-index:2;top:14px;left:14px;background:#fff;box-shadow:0 4px 12px -4px rgba(0,0,0,.3);border-radius:999px;padding:4px 12px;font-weight:800;font-size:12px;color:var(--cd)}
+.pcard .body{padding:18px 22px 0;display:flex;flex-direction:column;flex:1}
 .pcard h3{font-size:24px;margin-bottom:4px}
 .pcard .sub{color:var(--muted);font-size:14.5px;font-weight:600}
 .pcard .row{display:flex;align-items:flex-end;justify-content:space-between;margin-top:auto;padding-top:18px}
@@ -193,11 +195,11 @@ section.block{padding:90px 0;position:relative}
 
 /* ---------- quantity ---------- */
 .qty-grid{display:grid;grid-template-columns:.95fr 1.05fr;gap:26px;padding:24px 0 80px;align-items:start}
-.qprod{background:#fff;border:2px solid var(--line);border-radius:36px;padding:14px;box-shadow:var(--sh)}
-.qprod .pimg{aspect-ratio:1/1;border-radius:26px}
+.qprod{background:#fff;border:2px solid var(--line);border-radius:36px;padding:0 0 10px;overflow:hidden;box-shadow:var(--sh)}
+.qprod .pimg{aspect-ratio:1/1}
 .qprod .pimg .emo{font-size:150px;animation:floaty 4s ease-in-out infinite}
-.qprod .pimg img{padding:28px;animation:floaty 4s ease-in-out infinite}
-.qprod .info{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:18px 12px 8px;flex-wrap:wrap}
+
+.qprod .info{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:18px 24px 8px;flex-wrap:wrap}
 .qprod h3{font-size:30px}
 .tagp{display:inline-flex;gap:8px;align-items:center;background:var(--cs);color:var(--cd);border-radius:999px;padding:7px 14px;font-weight:800;font-size:14px}
 .panel{background:#fff;border:2px solid var(--line);border-radius:36px;padding:30px;box-shadow:var(--sh)}
@@ -278,7 +280,7 @@ input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;bac
 .tbl th{color:var(--muted);font-weight:800;font-size:12px;text-transform:uppercase}
 .tbl td:last-child{font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--leaf-d)}
 .imgpick{display:grid;grid-template-columns:150px 1fr;gap:16px;align-items:center}
-.imgpick .pimg{aspect-ratio:1/1;border-radius:18px;border:2px dashed #D9DEC8}
+.imgpick .pimg{aspect-ratio:4/3;border-radius:18px;border:2px dashed #D9DEC8}
 .imgpick .pimg .emo{font-size:60px}
 .switch{position:relative;width:54px;height:30px;flex:none}
 .switch input{opacity:0;width:0;height:0}
@@ -650,16 +652,16 @@ const PRESETS = [250, 500, 1000, 2000];
    emoji. Any size or shape works: images are centred and fitted
    automatically without stretching. Transparent PNGs look best.
    You can also upload images from Config mode > Slot > Product image.     */
-const PRODUCT_IMAGES = ['images/ricee.jpg', 'images/atta.png', 'images/sugar.png'];
+const PRODUCT_IMAGES = ['', '', ''];
 
 const DEFAULTS = {
   rzpKey: 'rzp_test_Totpq5PafGbvql',   // Razorpay TEST key id (never put the key secret in this file)
   pin: '1234',
   demo: false,
   slots: [
-    { name: 'Sona Masoori Rice', emoji: '🍚', sub: 'Premium aged rice', price: 60, open: 90, close: 0, ms: 800, img: '' },
-    { name: 'Whole Wheat Atta',  emoji: '🌾', sub: 'Stone-ground chakki atta', price: 45, open: 90, close: 0, ms: 900, img: '' },
-    { name: 'Crystal Sugar',     emoji: '🍬', sub: 'Pure refined sugar', price: 48, open: 90, close: 0, ms: 700, img: '' }
+    { name: 'Sona Masoori Rice', emoji: '🍚', sub: 'Premium aged rice', price: 60, open: 147, close: 111, ms: 800, img: '' },
+    { name: 'Whole Wheat Atta',  emoji: '🌾', sub: 'Stone-ground chakki atta', price: 45, open: 115, close: 59, ms: 900, img: '' },
+    { name: 'Crystal Sugar',     emoji: '🍬', sub: 'Pure refined sugar', price: 48, open: 114, close: 74, ms: 700, img: '' }
   ]
 };
 
@@ -673,6 +675,8 @@ function load() {
     if (s && s.slots && s.slots.length === 3) {
       const c = Object.assign({}, DEFAULTS, s);
       if (!c.rzpKey || c.rzpKey.includes('XXXX')) c.rzpKey = DEFAULTS.rzpKey;
+      // 90/0 were the old placeholder angles: switch to the calibrated defaults
+      c.slots.forEach((o, i) => { if (o.open === 90 && o.close === 0) { o.open = DEFAULTS.slots[i].open; o.close = DEFAULTS.slots[i].close; } });
       return c;
     }
   } catch (e) {}
@@ -784,7 +788,8 @@ async function connectGatt() {
   tx.addEventListener('characteristicvaluechanged', onNotify);
   setPill('on', dev.name || 'Connected');
   toast('Machine connected ✨', 'ok');
-  send('GET');
+  // edits made while the machine was away are sent now; otherwise read what the machine has
+  if (cfg.dirty) pushAll(); else send('GET');
 }
 function onDisconnect() {
   rx = null; tx = null; setPill('', 'Connect Machine');
@@ -806,7 +811,7 @@ function handleLine(line) {
   console.log('ESP32 >', line);
   const [cmd, ...a] = line.split(':');
   if (cmd === 'CFG') {
-    const s = +a[0] - 1; if (!(s >= 0 && s < 3)) return;
+    const s = +a[0] - 1; if (!(s >= 0 && s < 3) || cfg.dirty) return;
     const o = cfg.slots[s];
     o.open = +a[1]; o.close = +a[2]; o.ms = +a[3]; o.price = +a[4]; o.name = a.slice(5).join(':') || o.name;
     persist(); renderProducts(); if (cfgOpen) renderConfig();
@@ -921,7 +926,7 @@ function openConfig() {
 }
 function closeConfig() {
   $('cfgOverlay').classList.remove('show');
-  if (cfgOpen) { syncForm(); cfgOpen = false; send('MODE:RUN'); renderProducts(); if ($('scr-qty').classList.contains('active')) pick(sel.slot); }
+  if (cfgOpen) { syncForm(); cfgOpen = false; if (cfg.dirty) pushAll(true); send('MODE:RUN'); renderProducts(); if ($('scr-qty').classList.contains('active')) pick(sel.slot); }
 }
 $('pinPad').innerHTML = [1, 2, 3, 4, 5, 6, 7, 8, 9, '⌫', 0, '✓'].map(k => `<button class="${k === '✓' ? 'ok' : ''}" onclick="pinKey('${k}')">${k}</button>`).join('');
 function pinKey(k) {
@@ -961,8 +966,8 @@ function setTab(i) { syncForm(); curTab = i; renderConfig(); }
 function slotPane(s, i) {
   return `<div class="pane ${curTab === i ? 'on' : ''}">
     <div class="fgrid">
-      <div class="field"><label>Product name</label><input type="text" id="n${i}" maxlength="18" value="${esc(s.name)}"><small>Max 18 characters, shown on the LCD</small></div>
-      <div class="field"><label>Price per kg (₹)</label><input type="number" id="p${i}" min="1" step="0.5" value="${s.price}"></div>
+      <div class="field"><label>Product name</label><input type="text" id="n${i}" maxlength="18" value="${esc(s.name)}" onchange="syncForm();renderProducts();pushAll(true)"><small>Max 18 characters, shown on the LCD</small></div>
+      <div class="field"><label>Price per kg (₹)</label><input type="number" id="p${i}" min="1" step="0.5" value="${s.price}" onchange="syncForm();renderProducts();pushAll(true)"></div>
       <div class="field"><label>Tagline</label><input type="text" id="t${i}" maxlength="40" value="${esc(s.sub || '')}"></div>
       <div class="field"><label>Fallback icon (emoji)</label><input type="text" id="e${i}" maxlength="4" value="${s.emoji}"><small>Shown when there is no image</small></div>
     </div>
@@ -976,7 +981,7 @@ function slotPane(s, i) {
             <label class="btn b-sky b-sm" style="cursor:pointer">⬆ Upload image<input type="file" accept="image/*" hidden onchange="uploadImg(${i}, this.files[0])"></label>
             <button class="btn b-ghost b-sm" onclick="setImg(${i}, '')">Remove</button>
           </div>
-          <small style="display:block;margin-top:8px;color:var(--muted)">Any size works. It's fitted and centred automatically. Transparent PNGs look best.</small>
+          <small style="display:block;margin-top:8px;color:var(--muted)">Any size works. The photo fills the whole card and is cropped from the centre.</small>
         </div>
       </div>
     </div>
@@ -1036,6 +1041,7 @@ function settingsPane() {
   </div>`;
 }
 function syncForm() {
+  const before = JSON.stringify(cfg.slots.map(s => [s.name, s.price, s.open, s.close, s.ms]));
   cfg.slots.forEach((s, i) => {
     if (!$('n' + i)) return;
     s.name = clean($('n' + i).value) || s.name; s.emoji = $('e' + i).value.trim() || s.emoji; s.sub = $('t' + i).value.trim();
@@ -1049,6 +1055,7 @@ function syncForm() {
     if (np) { if (/^\d{4,6}$/.test(np)) { cfg.pin = np; $('sPin').value = ''; toast('PIN updated', 'ok'); } else toast('PIN must be 4–6 digits', 'err'); }
     cfg.demo = $('sDemo').checked;
   }
+  if (JSON.stringify(cfg.slots.map(s => [s.name, s.price, s.open, s.close, s.ms])) !== before) cfg.dirty = true;
   persist();
 }
 function setImg(i, src) {
@@ -1103,12 +1110,19 @@ async function testDispense(i) {
 }
 async function saveConfig() {
   syncForm(); renderProducts();
-  if (!connected()) { toast('Saved on this screen. Connect the machine to save it there too.', 'warn'); return; }
+  if (!connected()) { cfg.dirty = true; persist(); toast('Saved here. It will be sent to the machine as soon as it connects.', 'warn'); return; }
+  await pushAll();
+}
+// sends names, prices and calibration to the machine (it stores them and the LCD uses the new names straight away)
+async function pushAll(quiet) {
+  if (!connected()) return;
+  let ok = true;
   for (let i = 0; i < 3; i++) {
-    await sendCal(i);
-    await send(`PRD:${i + 1}:${cfg.slots[i].price}:${clean(cfg.slots[i].name)}`);
+    ok = (await sendCal(i)) && ok;
+    ok = (await send(`PRD:${i + 1}:${cfg.slots[i].price}:${clean(cfg.slots[i].name)}`)) && ok;
   }
-  await send('SAVE');
+  if (ok) { cfg.dirty = false; persist(); }
+  await send(quiet ? 'GET' : 'SAVE');
 }
 function readFromMachine() { if (needConn()) { send('GET'); toast('Reading config…'); } }
 
