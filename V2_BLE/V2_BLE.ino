@@ -43,7 +43,7 @@ const uint32_t THANKS_MS    = 6000;         // "thank you" screen time
 const uint32_t ORDER_IDLE_MS = 180000;      // order screen falls back to welcome after 3 min
 const bool DETACH_IDLE_SERVOS = false;      // true = cut servo pulses when idle (less buzz, but the gate holds less firmly)
 
-// ------------------------------------------------------------- data
+// -------------------------------------------------------------- data
 struct Slot {
   char     name[20];
   float    pricePerKg;
