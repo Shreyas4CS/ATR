@@ -210,7 +210,7 @@ section.block{padding:84px 0;position:relative}
 .pimg::before{content:'';position:absolute;width:64%;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle,#fff 0%,rgba(255,255,255,.4) 60%,transparent 70%);transition:transform .7s var(--spring)}
 .pimg:has(img)::before{display:none}
 .pcard:hover .pimg::before{transform:scale(1.2)}
-.pimg img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;transition:transform .8s var(--ease)}
+.pimg img{position:absolute;inset:0;width:100%;height:100%;object-fit:fill;display:block;transition:transform .8s var(--ease)}
 .pimg .emo{position:relative;font-size:96px;line-height:1;transition:transform .7s var(--spring);filter:drop-shadow(0 16px 16px rgba(26,33,64,.2))}
 .pcard:hover .pimg img{transform:scale(1.08)}
 .pcard:hover .pimg .emo{transform:scale(1.12) rotate(-8deg) translateY(-6px)}
@@ -751,8 +751,8 @@ const REDUCED = matchMedia('(prefers-reduced-motion: reduce)').matches;
 /* ---- PRODUCT IMAGES ----------------------------------------------------
    Put your product photos here. Use a file next to this HTML
    (e.g. 'images/rice.png'), a full https:// link, or leave '' to show the
-   emoji. Any size or shape works: images fill the card, cropped from the
-   centre. You can also upload images from Operator settings > Slot.       */
+   emoji. Any size or shape works: the whole image is stretched to fill the
+   card edge to edge. You can also upload images from Operator settings > Slot.       */
 const PRODUCT_IMAGES = ['', '', ''];
 
 const DEFAULTS = {
@@ -1193,7 +1193,7 @@ function slotPane(s, i) {
             <label class="btn b-ind b-sm" style="cursor:pointer">Upload image<input type="file" accept="image/*" hidden onchange="uploadImg(${i}, this.files[0])"></label>
             <button class="btn b-ghost b-sm" onclick="setImg(${i}, '')">Remove</button>
           </div>
-          <small style="display:block;margin-top:8px;color:var(--muted)">Any size works. The photo fills the whole card and is cropped from the centre.</small>
+          <small style="display:block;margin-top:8px;color:var(--muted)">Any size works. The whole photo is stretched to fill the card edge to edge, with no gaps and nothing cut off.</small>
         </div>
       </div>
     </div>
