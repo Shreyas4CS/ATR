@@ -101,11 +101,17 @@ input{font-family:inherit}
 .lockup .dv{font-family:var(--dev);font-size:22px;color:var(--turmeric);background:rgba(245,179,1,.12);border-radius:999px;padding:0 12px;line-height:1.5}
 .lockup span:last-child{font-weight:600;font-size:14.5px;color:#C9D0F5}
 .hero h1{font-size:clamp(40px,5.3vw,74px);font-weight:800;margin:26px 0 22px;letter-spacing:-.035em}
-.hero h1 .w{display:inline-block;overflow:hidden;vertical-align:bottom;padding-bottom:.08em;margin-bottom:-.08em}
-.hero h1 .w>span{display:inline-block;transform:translateY(110%);animation:wordUp .9s var(--ease) forwards}
-@keyframes wordUp{to{transform:none}}
-.hero h1 .gram{background:linear-gradient(90deg,var(--turmeric),#FFD966,var(--turmeric));-webkit-background-clip:text;background-clip:text;color:transparent;background-size:200% 100%;animation:wordUp .9s var(--ease) forwards,sheen 4s 1.6s linear infinite}
+.hero h1{min-height:3.3em}
+.hero h1 .hl{background:linear-gradient(90deg,var(--turmeric),#FFD966,var(--turmeric));-webkit-background-clip:text;background-clip:text;color:transparent;background-size:200% 100%;animation:sheen 4s linear infinite}
 @keyframes sheen{to{background-position:-200% 0}}
+.hero h1 .caret{position:relative;display:inline}
+.hero h1 .caret::after{content:'';position:absolute;left:.06em;bottom:-.06em;width:.09em;height:.82em;border-radius:3px;background:var(--turmeric);animation:caret 1s steps(1) infinite}
+.hero h1.typing .caret::after{animation:none}
+@keyframes caret{50%{opacity:0}}
+.tw-dots{display:flex;gap:7px;margin:-6px 0 22px}
+.tw-dots i{width:8px;height:8px;border-radius:99px;background:rgba(255,255,255,.22);transition:width .4s var(--ease),background .4s}
+.tw-dots i.on{width:26px;background:var(--turmeric)}
+@media (max-width:620px){.hero h1{min-height:4.4em}}
 .hero p.lead{font-size:18.5px;color:#C9D0F5;max-width:500px}
 .fade-in{opacity:0;animation:fadeIn .8s var(--ease) forwards}
 @keyframes fadeIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
@@ -440,7 +446,8 @@ footer.site::before{content:'धान्य';position:absolute;right:-20px;bott
     <div class="wrap">
       <div>
         <span class="lockup fade-in" style="animation-delay:.05s"><span class="dv">धान्य</span><span>Grain, measured fairly</span></span>
-        <h1 id="heroTitle">Your ration, poured to the gram</h1>
+        <h1 id="heroTitle" aria-label="Dhaanya, a smart ration ATM that pours your ration to the gram">Your ration, poured to the <span class="hl">gram</span></h1>
+        <div class="tw-dots" id="twDots" aria-hidden="true"></div>
         <p class="lead fade-in" style="animation-delay:.9s">Choose rice, atta or sugar, pick the exact weight and pay by UPI or card. The machine fills your bag while you watch. No queue, no scoop, no guessing.</p>
         <div class="cta fade-in" style="animation-delay:1.05s">
           <button class="btn b-tur b-lg" onclick="go('products')">
@@ -753,7 +760,7 @@ const REDUCED = matchMedia('(prefers-reduced-motion: reduce)').matches;
    (e.g. 'images/rice.png'), a full https:// link, or leave '' to show the
    emoji. Any size or shape works: the whole image is stretched to fill the
    card edge to edge. You can also upload images from Operator settings > Slot.       */
-const PRODUCT_IMAGES = ['images/rice.png', 'images/wheat.png', 'images/sugar.png'];
+const PRODUCT_IMAGES = ['', '', ''];
 
 const DEFAULTS = {
   rzpKey: 'rzp_test_Totpq5PafGbvql',   // Razorpay TEST key id (never put the key secret in this file)
@@ -847,10 +854,7 @@ document.addEventListener('pointerout', e => {
 /* ---------------- hero: headline, kolam, grains, LCD ---------------- */
 let lastPt = { x: innerWidth / 2, y: innerHeight / 2 };
 function buildHero() {
-  // headline words rise one after another
-  const h = $('heroTitle');
-  h.innerHTML = h.textContent.split(' ').map((w, i) =>
-    `<span class="w"><span class="${w === 'gram' ? 'gram' : ''}" style="animation-delay:${.2 + i * .08}s">${w}</span></span>`).join(' ');
+  startHeadline();
 
   // kolam: a looping chalk line drawn around a ring of dots (a hypotrochoid, like a sikku kolam)
   const R = 8, r = 3, d = 4.6, k = 196 / ((R - r) + d);
@@ -876,6 +880,49 @@ function buildHero() {
   new IntersectionObserver((es, o) => es.forEach(en => { if (en.isIntersecting) { en.target.classList.add('seen'); o.disconnect(); } }), { threshold: .3 }).observe($('howTrack'));
   startLcd();
 }
+/* ---- HERO HEADLINE TYPEWRITER -----------------------------------------
+   Edit these lines freely. Each is [plain text, highlighted ending].
+   The highlighted part shows in turmeric gold.                            */
+const HEADLINES = [
+  ['Your ration, poured to the ', 'gram'],
+  ['Pay by UPI, collect in ', 'seconds'],
+  ['No queue, no scoop, no ', 'guessing'],
+  ['Every gram you pay for lands in your ', 'bag'],
+  ['Clean grain, sealed away from ', 'hands'],
+  ['Open all day, all night, ', '24×7'],
+  ['Rice, atta and sugar, ', 'on tap'],
+  ['A smart ration ATM built at ', 'CognoSpace']
+];
+let hlIdx = 0, hlTimer;
+function drawHeadline(i, n, typing) {
+  const [a, b] = HEADLINES[i], full = a + b, shown = full.slice(0, n);
+  const plain = shown.slice(0, Math.min(n, a.length)), hi = shown.slice(a.length);
+  $('heroTitle').innerHTML = esc(plain) + (hi ? `<span class="hl">${esc(hi)}</span>` : '') + '&#8288;<span class="caret"></span>';   // word joiner keeps the cursor on the same line as the last letter
+  $('heroTitle').classList.toggle('typing', typing);
+}
+function startHeadline() {
+  $('twDots').innerHTML = HEADLINES.map(() => '<i></i>').join('');
+  const dots = () => [...$('twDots').children].forEach((d, k) => d.classList.toggle('on', k === hlIdx));
+  if (REDUCED) {                                     // no typing: swap whole lines every 4 s
+    const show = () => { drawHeadline(hlIdx, 999, false); dots(); hlIdx = (hlIdx + 1) % HEADLINES.length; };
+    show(); hlTimer = setInterval(show, 4000); return;
+  }
+  const len = () => HEADLINES[hlIdx][0].length + HEADLINES[hlIdx][1].length;
+  let n = 0, phase = 'type';
+  const step = () => {
+    if (phase === 'type') {
+      drawHeadline(hlIdx, ++n, true);
+      if (n >= len()) { phase = 'hold'; drawHeadline(hlIdx, n, false); return (hlTimer = setTimeout(step, 2600)); }
+      return (hlTimer = setTimeout(step, 55 + Math.random() * 45));   // a little uneven, like real typing
+    }
+    if (phase === 'hold') phase = 'erase';
+    drawHeadline(hlIdx, --n, true);
+    if (n <= 0) { hlIdx = (hlIdx + 1) % HEADLINES.length; dots(); phase = 'type'; return (hlTimer = setTimeout(step, 350)); }
+    hlTimer = setTimeout(step, 22);
+  };
+  dots(); n = 0; hlTimer = setTimeout(step, 400);
+}
+
 // the drawn LCD cycles through the products the same way the real 20x4 screen does
 let lcdIdx = 0, lcdTimer, typeTimer;
 function typeOn(el, text) {
