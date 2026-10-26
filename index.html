@@ -9,7 +9,7 @@
 <meta name="theme-color" content="#1F2B6C">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;600;700;800&family=Figtree:wght@400;500;600;700;800&family=VT323&family=Tiro+Telugu&family=Noto+Sans+Telugu:wght@400;600;700;800&family=Noto+Sans+Devanagari:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;600;700;800&family=Figtree:wght@400;500;600;700;800&family=VT323&family=Tiro+Telugu&family=Noto+Sans+Telugu:wght@400;600;700;800&family=Noto+Sans+Devanagari:wght@400;600;700;800&family=Noto+Sans+Tamil:wght@400;600;700;800&family=Noto+Sans+Kannada:wght@400;600;700;800&family=Noto+Sans+Malayalam:wght@400;600;700;800&display=swap" rel="stylesheet">
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <style>
 :root{
@@ -21,10 +21,10 @@
   --paper:#F3F4F8; --card:#FFFFFF; --ink:#1A2140; --muted:#5C648A; --line:#E1E4F0;
   --sh:0 1px 2px rgba(26,33,64,.06),0 14px 34px -22px rgba(26,33,64,.45);
   --sh-lg:0 40px 80px -40px rgba(18,26,69,.6);
-  --fd:'Unbounded','Noto Sans Telugu','Noto Sans Devanagari',system-ui,sans-serif;
-  --fb:'Figtree','Noto Sans Telugu','Noto Sans Devanagari',system-ui,sans-serif;
+  --fd:'Unbounded','Noto Sans Telugu','Noto Sans Devanagari','Noto Sans Tamil','Noto Sans Kannada','Noto Sans Malayalam',system-ui,sans-serif;
+  --fb:'Figtree','Noto Sans Telugu','Noto Sans Devanagari','Noto Sans Tamil','Noto Sans Kannada','Noto Sans Malayalam',system-ui,sans-serif;
   --lcd:'VT323',monospace;
-  --dev:'Figtree','Tiro Telugu','Noto Sans Telugu','Nirmala UI','Gautami',sans-serif;   /* Figtree has no Telugu letters, so English uses Figtree and Telugu falls through to Tiro Telugu */
+  --dev:'Figtree','Tiro Telugu','Noto Sans Telugu','Noto Sans Devanagari','Noto Sans Tamil','Noto Sans Kannada','Noto Sans Malayalam','Nirmala UI',sans-serif;   /* Figtree has no Indian letters, so English uses Figtree and each script falls through to its own font */
   --ease:cubic-bezier(.2,.8,.2,1);
   --spring:cubic-bezier(.3,1.5,.5,1);
 }
@@ -379,8 +379,14 @@ input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;bac
 .close-x:hover{transform:rotate(90deg)}
 .cfg-head .close-x{position:static;margin-left:auto;background:rgba(255,255,255,.12);color:#fff}
 
+/* ---------- brand word cycling through scripts ---------- */
+.brand-cycle{display:inline-block;transition:opacity .35s var(--ease),transform .35s var(--ease),filter .35s}
+.brand-cycle.out{opacity:0;transform:translateY(-55%);filter:blur(3px)}
+.brand-cycle.pre{transition:none;opacity:0;transform:translateY(55%);filter:blur(3px)}
+.mark small .brand-cycle{min-width:3.6em}
+
 /* ---------- language picker ---------- */
-.lang-modal{width:min(720px,100%);padding:38px 34px 32px}
+.lang-modal{width:min(760px,100%);max-height:94vh;overflow:auto;padding:38px 34px 32px}
 .lang-modal .globe{width:64px;height:64px;margin:0 auto;border-radius:20px;background:var(--indigo);color:var(--turmeric);display:grid;place-items:center;animation:globeSpin 8s linear infinite}
 .lang-modal .globe svg{width:32px;height:32px}
 @keyframes globeSpin{50%{transform:rotate(12deg) scale(1.05)}}
@@ -388,7 +394,7 @@ input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;bac
 .lang-modal .multi{color:var(--muted);font-weight:600;margin-top:6px;font-size:16px}
 .lang-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:28px}
 .lang-card{position:relative;overflow:hidden;border-radius:24px;padding:24px 14px 20px;background:var(--cs);border:2.5px solid transparent;text-align:center;opacity:0;animation:langIn .6s var(--spring) forwards;transition:transform .35s var(--spring),border-color .25s,box-shadow .3s}
-.lang-card:nth-child(2){animation-delay:.08s}.lang-card:nth-child(3){animation-delay:.16s}
+.lang-card:nth-child(2){animation-delay:.06s}.lang-card:nth-child(3){animation-delay:.12s}.lang-card:nth-child(4){animation-delay:.18s}.lang-card:nth-child(5){animation-delay:.24s}.lang-card:nth-child(6){animation-delay:.3s}
 @keyframes langIn{from{opacity:0;transform:translateY(26px) scale(.9)}to{opacity:1;transform:none}}
 .lang-card:hover,.lang-card:focus-visible{transform:translateY(-6px);border-color:var(--c);box-shadow:0 24px 36px -22px var(--c)}
 .lang-card:active{transform:scale(.96)}
@@ -401,12 +407,17 @@ input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;bac
 .lc-te{--c:#E8A200;--cd:#8A5F00;--cs:#FFF3D1}
 .lc-hi{--c:#E23B4E;--cd:#B5223A;--cs:#FFE4E8}
 .lc-en{--c:#3D5AFE;--cd:#2236C9;--cs:#E6EBFF}
+.lc-ta{--c:#1E9E63;--cd:#147A4B;--cs:#DDF5E9}
+.lc-kn{--c:#C9A46A;--cd:#7A5A28;--cs:#F4EADA}
+.lc-ml{--c:#0E9AA7;--cd:#0A6F78;--cs:#DDF4F6}
+.lang-modal .multi{max-width:560px;margin-left:auto;margin-right:auto;line-height:1.7}
+.lang-card .big{font-size:30px}
 .lang-chip{margin-left:auto;display:inline-flex;align-items:center;gap:8px;padding:10px 16px;border-radius:14px;background:#fff;border:2px solid var(--line);font-weight:800;font-size:14.5px;color:var(--indigo);transition:.3s var(--spring)}
 .lang-chip:hover{border-color:var(--indigo-2);transform:translateY(-2px)}
 .lang-chip svg{width:18px;height:18px}
 html:not([lang=en]) .page-head h2,html:not([lang=en]) .pcard h3,html:not([lang=en]) .qprod h3,html:not([lang=en]) .modal h3{letter-spacing:0;line-height:1.35}
 html:not([lang=en]) .page-head h2{font-size:clamp(26px,3.2vw,38px)}
-@media (max-width:620px){.lang-grid{grid-template-columns:1fr}.lang-card{display:grid;grid-template-columns:auto 1fr;align-items:center;gap:4px 16px;text-align:left;padding:16px 18px}.lang-card .big{grid-row:span 2;font-size:30px}.lang-card .hi-txt{margin:0;justify-self:start}.lang-modal{padding:30px 20px 24px}.lang-chip{margin-left:0}}
+@media (max-width:620px){.lang-grid{grid-template-columns:1fr 1fr;gap:10px;margin-top:20px}.lang-card{padding:14px 8px 12px;border-radius:18px}.lang-card .big{font-size:23px}.lang-card .hi-txt{margin-top:6px;font-size:12px}.lang-modal h3{font-size:22px}.lang-modal .multi{font-size:13.5px}.lang-modal{padding:30px 20px 24px}.lang-chip{margin-left:0}}
 
 /* ---------- toast ---------- */
 .toasts{position:fixed;top:88px;right:16px;z-index:200;display:flex;flex-direction:column;gap:10px;max-width:calc(100vw - 32px)}
@@ -478,7 +489,7 @@ footer.site::before{content:'ధాన్యం';position:absolute;right:-20px;b
     <span class="sep"></span>
     <div class="mark" onclick="go('home')">
       <span class="seed"><svg width="22" height="22" viewBox="0 0 24 24"><ellipse cx="9" cy="10" rx="3.2" ry="6" fill="#F5B301" transform="rotate(-24 9 10)"/><ellipse cx="15.5" cy="13" rx="3.2" ry="6" fill="#fff" transform="rotate(24 15.5 13)"/></svg></span>
-      <div><b>Dhaanyam</b><small>ధాన్యం · smart ration ATM</small></div>
+      <div><b>Dhaanyam</b><small><span class="brand-cycle">ధాన్యం</span> · smart ration ATM</small></div>
     </div>
     <span class="sp"></span>
     <button class="conn" id="blePill" onclick="toggleBle()" title="Connect to the machine over Bluetooth">
@@ -496,7 +507,7 @@ footer.site::before{content:'ధాన్యం';position:absolute;right:-20px;b
     <div class="drift" id="drift"></div>
     <div class="wrap">
       <div>
-        <span class="lockup fade-in" style="animation-delay:.05s"><span class="dv">ధాన్యం</span><span>Grain, measured fairly</span></span>
+        <span class="lockup fade-in" style="animation-delay:.05s"><span class="dv brand-cycle">ధాన్యం</span><span>Grain, measured fairly</span></span>
         <h1 id="heroTitle" aria-label="Dhaanyam, a smart ration ATM that pours your ration to the gram">Your ration, poured to the <span class="hl">gram</span></h1>
         <div class="tw-dots" id="twDots" aria-hidden="true"></div>
         <p class="lead fade-in" style="animation-delay:.9s">Choose rice, atta or sugar, pick the exact weight and pay by UPI or card. The machine fills your bag while you watch. No queue, no scoop, no guessing.</p>
@@ -585,7 +596,7 @@ footer.site::before{content:'ధాన్యం';position:absolute;right:-20px;b
       <div class="intro">
         <h2>A ration counter that is fair to every household</h2>
         <p>Every gram you pay for lands in your bag. The machine keeps grain sealed, works through the night and never runs short of change.</p>
-        <div class="dv" aria-hidden="true">ధాన్యం</div>
+        <div class="dv brand-cycle" aria-hidden="true">ధాన్యం</div>
       </div>
       <div class="ben">
         <div style="--cs:var(--leaf-s)"><div class="ic">💳</div><b>Pay first, then pour</b><span>UPI, cards and netbanking through Razorpay. The gate only opens after the payment goes through.</span></div>
@@ -707,7 +718,7 @@ footer.site::before{content:'ధాన్యం';position:absolute;right:-20px;b
   </div>
 </footer>
 
-<div id="wipe" aria-hidden="true"><span>ధాన్యం</span></div>
+<div id="wipe" aria-hidden="true"><span class="brand-cycle">ధాన్యం</span></div>
 
 <!-- ================= DISPENSE OVERLAY ================= -->
 <div class="overlay" id="dispOverlay">
@@ -781,10 +792,13 @@ footer.site::before{content:'ధాన్యం';position:absolute;right:-20px;b
     <button class="close-x" onclick="closeLang()" aria-label="Close">✕</button>
     <div class="globe"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9.5"/><path d="M2.5 12h19M12 2.5c2.6 2.8 3.9 6 3.9 9.5s-1.3 6.7-3.9 9.5c-2.6-2.8-3.9-6-3.9-9.5s1.3-6.7 3.9-9.5z"/></svg></div>
     <h3 id="langTitle">Choose your language</h3>
-    <p class="multi">భాషను ఎంచుకోండి · भाषा चुनें</p>
+    <p class="multi">భాషను ఎంచుకోండి · भाषा चुनें · மொழியைத் தேர்ந்தெடுங்கள் · ಭಾಷೆ ಆಯ್ಕೆಮಾಡಿ · ഭാഷ തിരഞ്ഞെടുക്കൂ</p>
     <div class="lang-grid">
       <button class="lang-card lc-te" data-lang="te" onclick="chooseLang('te', this)"><span class="big">తెలుగు</span><span class="en">Telugu</span><span class="hi-txt">నమస్కారం 🙏</span></button>
       <button class="lang-card lc-hi" data-lang="hi" onclick="chooseLang('hi', this)"><span class="big">हिन्दी</span><span class="en">Hindi</span><span class="hi-txt">नमस्ते 🙏</span></button>
+      <button class="lang-card lc-ta" data-lang="ta" onclick="chooseLang('ta', this)"><span class="big">தமிழ்</span><span class="en">Tamil</span><span class="hi-txt">வணக்கம் 🙏</span></button>
+      <button class="lang-card lc-kn" data-lang="kn" onclick="chooseLang('kn', this)"><span class="big">ಕನ್ನಡ</span><span class="en">Kannada</span><span class="hi-txt">ನಮಸ್ಕಾರ 🙏</span></button>
+      <button class="lang-card lc-ml" data-lang="ml" onclick="chooseLang('ml', this)"><span class="big">മലയാളം</span><span class="en">Malayalam</span><span class="hi-txt">നമസ്കാരം 🙏</span></button>
       <button class="lang-card lc-en" data-lang="en" onclick="chooseLang('en', this)"><span class="big">English</span><span class="en">English</span><span class="hi-txt">Hello 👋</span></button>
     </div>
   </div>
@@ -836,11 +850,14 @@ const DEFAULTS = {
   demo: false,
   slots: [
     { name: 'Sona Masoori Rice', emoji: '🍚', sub: 'Premium aged rice', price: 60, open: 147, close: 111, ms: 800, img: '',
-      name_te: 'సోనా మసూరి బియ్యం', sub_te: 'నాణ్యమైన పాత బియ్యం', name_hi: 'सोना मसूरी चावल', sub_hi: 'बढ़िया पुराना चावल' },
+      name_te: 'సోనా మసూరి బియ్యం', sub_te: 'నాణ్యమైన పాత బియ్యం', name_hi: 'सोना मसूरी चावल', sub_hi: 'बढ़िया पुराना चावल',
+      name_ta: 'சோனா மசூரி அரிசி', sub_ta: 'தரமான பழைய அரிசி', name_kn: 'ಸೋನಾ ಮಸೂರಿ ಅಕ್ಕಿ', sub_kn: 'ಉತ್ತಮ ಹಳೆಯ ಅಕ್ಕಿ', name_ml: 'സോന മസൂരി അരി', sub_ml: 'മികച്ച പഴയ അരി' },
     { name: 'Whole Wheat Atta',  emoji: '🌾', sub: 'Stone-ground chakki atta', price: 45, open: 115, close: 59, ms: 900, img: '',
-      name_te: 'గోధుమ పిండి', sub_te: 'చక్కీలో విసిరిన గోధుమ పిండి', name_hi: 'गेहूँ का आटा', sub_hi: 'चक्की पिसा आटा' },
+      name_te: 'గోధుమ పిండి', sub_te: 'చక్కీలో విసిరిన గోధుమ పిండి', name_hi: 'गेहूँ का आटा', sub_hi: 'चक्की पिसा आटा',
+      name_ta: 'கோதுமை மாவு', sub_ta: 'சக்கியில் அரைத்த கோதுமை மாவு', name_kn: 'ಗೋಧಿ ಹಿಟ್ಟು', sub_kn: 'ಚಕ್ಕಿಯಲ್ಲಿ ಬೀಸಿದ ಗೋಧಿ ಹಿಟ್ಟು', name_ml: 'ഗോതമ്പ് പൊടി', sub_ml: 'ചക്കിയിൽ പൊടിച്ച ഗോതമ്പ് പൊടി' },
     { name: 'Crystal Sugar',     emoji: '🍬', sub: 'Pure refined sugar', price: 48, open: 114, close: 74, ms: 700, img: '',
-      name_te: 'చక్కెర', sub_te: 'స్వచ్ఛమైన శుద్ధి చేసిన చక్కెర', name_hi: 'चीनी', sub_hi: 'शुद्ध रिफाइंड चीनी' }
+      name_te: 'చక్కెర', sub_te: 'స్వచ్ఛమైన శుద్ధి చేసిన చక్కెర', name_hi: 'चीनी', sub_hi: 'शुद्ध रिफाइंड चीनी',
+      name_ta: 'சர்க்கரை', sub_ta: 'தூய சுத்திகரிக்கப்பட்ட சர்க்கரை', name_kn: 'ಸಕ್ಕರೆ', sub_kn: 'ಶುದ್ಧ ಸಂಸ್ಕರಿಸಿದ ಸಕ್ಕರೆ', name_ml: 'പഞ്ചസാര', sub_ml: 'ശുദ്ധമായ റിഫൈൻഡ് പഞ്ചസാര' }
   ]
 };
 
@@ -848,8 +865,12 @@ const DEFAULTS = {
    Customer screens (shop, quantity, payment, pouring, thank you) follow the
    language picked after "Buy groceries". The home page and operator settings
    stay in English. Edit any wording here.                                  */
-const TR_KEYS = ['name_te', 'name_hi', 'sub_te', 'sub_hi'];
-const LANG_NAMES = { te: 'తెలుగు', hi: 'हिन्दी', en: 'English' };
+const LANGS = ['te', 'hi', 'ta', 'kn', 'ml'];          // every language besides English
+const LANG_EN = { te: 'Telugu', hi: 'Hindi', ta: 'Tamil', kn: 'Kannada', ml: 'Malayalam' };
+const TR_KEYS = LANGS.flatMap(l => ['name_' + l, 'sub_' + l]);
+const LANG_NAMES = { te: 'తెలుగు', hi: 'हिन्दी', ta: 'தமிழ்', kn: 'ಕನ್ನಡ', ml: 'മലയാളം', en: 'English' };
+// "Dhaanyam" (grain) in each script; the home page and nav cycle through these
+const BRAND_WORDS = ['ధాన్యం', 'धान्य', 'தானியம்', 'ಧಾನ್ಯ', 'ധാന്യം'];
 const I18N = {
   en: {
     chooseTitle: 'Choose your essentials', chooseSub: 'Fresh, quality-checked and priced per kilogram.',
@@ -895,6 +916,51 @@ const I18N = {
     paid: 'भुगतान सफल रहा', payCancel: 'भुगतान रद्द हुआ', payFail: 'भुगतान विफल रहा',
     notReady: 'मशीन तैयार नहीं है। कृपया ऑपरेटर से पूछें।', minOrder: 'न्यूनतम ऑर्डर ₹1 है',
     unavailable: 'यह सामान अभी उपलब्ध नहीं है', busy: 'मशीन व्यस्त है। कृपया थोड़ा रुकें।'
+  },
+  ta: {
+    chooseTitle: 'உங்களுக்குத் தேவையானதைத் தேர்ந்தெடுங்கள்', chooseSub: 'தரம் சோதிக்கப்பட்ட புதிய பொருட்கள், கிலோ விலையில்.',
+    slot: 'ஸ்லாட்', perKg: '/ கிலோ', g: 'கிராம்', kg: 'கிலோ', select: 'தேர்ந்தெடு',
+    emptyTitle: 'தற்போது பொருட்கள் எதுவும் இல்லை', emptySub: 'சிறிது நேரம் கழித்து வாருங்கள் அல்லது இயக்குநரிடம் கேளுங்கள்.',
+    qtyTitle: 'உங்களுக்கு எவ்வளவு வேண்டும்?', qtySub: 'ஒரு அளவைத் தட்டுங்கள் அல்லது ஸ்லைடரால் சரிசெய்யுங்கள்.',
+    quick: 'விரைவு அளவுகள்', ofBag: '5 கிலோ பையில்',
+    bProduct: 'பொருள்', bRate: 'விலை', bQty: 'அளவு', bTotal: 'மொத்தம்', pay: '{a} செலுத்துங்கள்',
+    secure: 'Razorpay மூலம் பாதுகாப்பானது. UPI, கார்டுகள், நெட்பேங்கிங் ஏற்கப்படும்.',
+    pouringTitle: 'உங்கள் ரேஷன் நிரப்பப்படுகிறது', pouringText: '{g} {p} நிரப்பப்படுகிறது', hint: '👜 உங்கள் பையைக் குழாயின் கீழ் வையுங்கள்',
+    thanks: 'நன்றி!', doneText: '{g} {p} உங்கள் பையில் உள்ளது. தயவுசெய்து எடுத்துக்கொள்ளுங்கள்.', bye: 'மீண்டும் சந்திப்போம்',
+    returning: '{n} விநாடிகளில் முதல் பக்கத்துக்குத் திரும்பும்', done: 'முடிந்தது',
+    paid: 'பணம் செலுத்தப்பட்டது', payCancel: 'பணம் செலுத்துதல் ரத்து செய்யப்பட்டது', payFail: 'பணம் செலுத்துதல் தோல்வியடைந்தது',
+    notReady: 'இயந்திரம் தயாராக இல்லை. இயக்குநரிடம் கேளுங்கள்.', minOrder: 'குறைந்தபட்ச ஆர்டர் ₹1',
+    unavailable: 'இந்தப் பொருள் தற்போது கிடைக்கவில்லை', busy: 'இயந்திரம் பணியில் உள்ளது. சிறிது காத்திருங்கள்.'
+  },
+  kn: {
+    chooseTitle: 'ನಿಮಗೆ ಬೇಕಾದದ್ದನ್ನು ಆಯ್ಕೆಮಾಡಿ', chooseSub: 'ಗುಣಮಟ್ಟ ಪರಿಶೀಲಿಸಿದ ತಾಜಾ ಸರಕುಗಳು, ಕಿಲೋ ಬೆಲೆಯಲ್ಲಿ.',
+    slot: 'ಸ್ಲಾಟ್', perKg: '/ ಕಿಲೋ', g: 'ಗ್ರಾಂ', kg: 'ಕಿಲೋ', select: 'ಆಯ್ಕೆಮಾಡಿ',
+    emptyTitle: 'ಸದ್ಯಕ್ಕೆ ಯಾವುದೇ ಸರಕುಗಳು ಲಭ್ಯವಿಲ್ಲ', emptySub: 'ಸ್ವಲ್ಪ ಸಮಯದ ನಂತರ ಬನ್ನಿ ಅಥವಾ ಆಪರೇಟರ್ ಅನ್ನು ಕೇಳಿ.',
+    qtyTitle: 'ನಿಮಗೆ ಎಷ್ಟು ಬೇಕು?', qtySub: 'ಒಂದು ಪ್ರಮಾಣವನ್ನು ಒತ್ತಿ ಅಥವಾ ಸ್ಲೈಡರ್‌ನಿಂದ ಸರಿಪಡಿಸಿ.',
+    quick: 'ತ್ವರಿತ ಪ್ರಮಾಣಗಳು', ofBag: '5 ಕಿಲೋ ಚೀಲದಲ್ಲಿ',
+    bProduct: 'ಸರಕು', bRate: 'ಬೆಲೆ', bQty: 'ಪ್ರಮಾಣ', bTotal: 'ಒಟ್ಟು', pay: '{a} ಪಾವತಿಸಿ',
+    secure: 'Razorpay ಮೂಲಕ ಸುರಕ್ಷಿತ. UPI, ಕಾರ್ಡ್‌ಗಳು, ನೆಟ್‌ಬ್ಯಾಂಕಿಂಗ್ ಸ್ವೀಕರಿಸಲಾಗುತ್ತದೆ.',
+    pouringTitle: 'ನಿಮ್ಮ ಪಡಿತರ ತುಂಬಲಾಗುತ್ತಿದೆ', pouringText: '{g} {p} ತುಂಬಲಾಗುತ್ತಿದೆ', hint: '👜 ನಿಮ್ಮ ಚೀಲವನ್ನು ಕೊಳವೆಯ ಕೆಳಗೆ ಇಡಿ',
+    thanks: 'ಧನ್ಯವಾದಗಳು!', doneText: '{g} {p} ನಿಮ್ಮ ಚೀಲದಲ್ಲಿದೆ. ದಯವಿಟ್ಟು ತೆಗೆದುಕೊಳ್ಳಿ.', bye: 'ಮತ್ತೆ ಸಿಗೋಣ',
+    returning: '{n} ಸೆಕೆಂಡುಗಳಲ್ಲಿ ಮುಖಪುಟಕ್ಕೆ ಹಿಂತಿರುಗುತ್ತದೆ', done: 'ಮುಗಿಯಿತು',
+    paid: 'ಪಾವತಿ ಯಶಸ್ವಿಯಾಗಿದೆ', payCancel: 'ಪಾವತಿ ರದ್ದಾಗಿದೆ', payFail: 'ಪಾವತಿ ವಿಫಲವಾಗಿದೆ',
+    notReady: 'ಯಂತ್ರ ಸಿದ್ಧವಾಗಿಲ್ಲ. ದಯವಿಟ್ಟು ಆಪರೇಟರ್ ಅನ್ನು ಕೇಳಿ.', minOrder: 'ಕನಿಷ್ಠ ಆರ್ಡರ್ ₹1',
+    unavailable: 'ಈ ಸರಕು ಸದ್ಯಕ್ಕೆ ಲಭ್ಯವಿಲ್ಲ', busy: 'ಯಂತ್ರ ಕಾರ್ಯನಿರತವಾಗಿದೆ. ದಯವಿಟ್ಟು ಸ್ವಲ್ಪ ಕಾಯಿರಿ.'
+  },
+  ml: {
+    chooseTitle: 'നിങ്ങൾക്ക് വേണ്ടത് തിരഞ്ഞെടുക്കൂ', chooseSub: 'ഗുണനിലവാരം പരിശോധിച്ച പുതിയ സാധനങ്ങൾ, കിലോ വിലയിൽ.',
+    slot: 'സ്ലോട്ട്', perKg: '/ കിലോ', g: 'ഗ്രാം', kg: 'കിലോ', select: 'തിരഞ്ഞെടുക്കൂ',
+    emptyTitle: 'ഇപ്പോൾ സാധനങ്ങളൊന്നും ലഭ്യമല്ല', emptySub: 'കുറച്ച് കഴിഞ്ഞ് വരൂ, അല്ലെങ്കിൽ ഓപ്പറേറ്ററോട് ചോദിക്കൂ.',
+    qtyTitle: 'നിങ്ങൾക്ക് എത്ര വേണം?', qtySub: 'ഒരു അളവ് തൊടൂ, അല്ലെങ്കിൽ സ്ലൈഡർ ഉപയോഗിച്ച് ക്രമീകരിക്കൂ.',
+    quick: 'പെട്ടെന്നുള്ള അളവുകൾ', ofBag: '5 കിലോ ബാഗിൽ',
+    bProduct: 'സാധനം', bRate: 'വില', bQty: 'അളവ്', bTotal: 'ആകെ', pay: '{a} അടയ്ക്കൂ',
+    secure: 'Razorpay വഴി സുരക്ഷിതം. UPI, കാർഡുകൾ, നെറ്റ്ബാങ്കിംഗ് സ്വീകരിക്കും.',
+    pouringTitle: 'നിങ്ങളുടെ റേഷൻ നിറയ്ക്കുന്നു', pouringText: '{g} {p} നിറയ്ക്കുന്നു', hint: '👜 നിങ്ങളുടെ ബാഗ് കുഴലിന് താഴെ വയ്ക്കൂ',
+    thanks: 'നന്ദി!', doneText: '{g} {p} നിങ്ങളുടെ ബാഗിലുണ്ട്. ദയവായി എടുക്കൂ.', bye: 'വീണ്ടും കാണാം',
+    returning: '{n} സെക്കൻഡിൽ ആദ്യ പേജിലേക്ക് മടങ്ങും', done: 'കഴിഞ്ഞു',
+    paid: 'പണമടയ്ക്കൽ വിജയിച്ചു', payCancel: 'പണമടയ്ക്കൽ റദ്ദാക്കി', payFail: 'പണമടയ്ക്കൽ പരാജയപ്പെട്ടു',
+    notReady: 'യന്ത്രം തയ്യാറല്ല. ദയവായി ഓപ്പറേറ്ററോട് ചോദിക്കൂ.', minOrder: 'കുറഞ്ഞ ഓർഡർ ₹1',
+    unavailable: 'ഈ സാധനം ഇപ്പോൾ ലഭ്യമല്ല', busy: 'യന്ത്രം തിരക്കിലാണ്. ദയവായി അല്പം കാത്തിരിക്കൂ.'
   }
 };
 let lang = null;                       // null = this customer hasn't picked yet
@@ -1129,6 +1195,24 @@ function renderProducts() {
     `<button class="pp t${i}" onclick="shop(${i})"><i>${p.emoji}</i>${esc(shortName(p.name))} <b>₹${p.price}</b></button>`); }).join('');
   cfg.slots.forEach((p, i) => $('hl' + i).textContent = shortName(p.name));
 }
+
+/* ---------------- brand word cycling ---------------- */
+let brandIdx = 0;
+setInterval(() => {
+  if (document.hidden) return;
+  brandIdx = (brandIdx + 1) % BRAND_WORDS.length;
+  const word = BRAND_WORDS[brandIdx];
+  document.querySelectorAll('.brand-cycle').forEach(el => {
+    if (REDUCED) { el.textContent = word; return; }
+    el.classList.add('out');                                    // slide up and fade out
+    setTimeout(() => {
+      el.textContent = word;
+      el.classList.remove('out'); el.classList.add('pre');      // jump below, invisible
+      void el.offsetWidth;
+      el.classList.remove('pre');                               // slide up into place
+    }, 350);
+  });
+}, 2600);
 
 /* ---------------- language picker ---------------- */
 let afterLang = null;
@@ -1457,10 +1541,9 @@ function slotPane(s, i) {
     <div class="box">
       <h5>🌐 Name for customers in other languages</h5>
       <div class="fgrid">
-        <div class="field"><label>Name in Telugu</label><input type="text" id="nte${i}" maxlength="40" value="${esc(s.name_te || '')}" placeholder="e.g. సోనా మసూరి బియ్యం"></div>
-        <div class="field"><label>Name in Hindi</label><input type="text" id="nhi${i}" maxlength="40" value="${esc(s.name_hi || '')}" placeholder="e.g. सोना मसूरी चावल"></div>
-        <div class="field"><label>Tagline in Telugu</label><input type="text" id="ste${i}" maxlength="60" value="${esc(s.sub_te || '')}"></div>
-        <div class="field"><label>Tagline in Hindi</label><input type="text" id="shi${i}" maxlength="60" value="${esc(s.sub_hi || '')}"></div>
+        ${LANGS.map(l => `
+        <div class="field"><label>Name in ${LANG_EN[l]}</label><input type="text" id="n${l}${i}" maxlength="40" value="${esc(s['name_' + l] || '')}"></div>
+        <div class="field"><label>Tagline in ${LANG_EN[l]}</label><input type="text" id="s${l}${i}" maxlength="60" value="${esc(s['sub_' + l] || '')}"></div>`).join('')}
       </div>
       <small style="display:block;margin-top:10px;color:var(--muted)">Leave a box empty to show the English text. The machine's LCD always shows the English name.</small>
     </div>
@@ -1539,7 +1622,7 @@ function syncForm() {
     if (!$('n' + i)) return;
     const oldName = s.name;
     s.name = clean($('n' + i).value) || s.name; s.emoji = $('e' + i).value.trim() || s.emoji; s.sub = $('t' + i).value.trim();
-    const fields = { name_te: 'nte', name_hi: 'nhi', sub_te: 'ste', sub_hi: 'shi' };
+    const fields = {}; LANGS.forEach(l => { fields['name_' + l] = 'n' + l; fields['sub_' + l] = 's' + l; });
     for (const k in fields) {
       const v = $(fields[k] + i).value.trim();
       // renamed in English but the translation left untouched: it belongs to the old product, so clear it
