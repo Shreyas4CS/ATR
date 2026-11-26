@@ -845,7 +845,7 @@ const REDUCED = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const PRODUCT_IMAGES = ['images/rice.png', 'images/wheat.png', 'images/sugar.png'];
 
 const DEFAULTS = {
-  rzpKey: 'rzp_test_Totpq5PafGbvql',   // Razorpay TEST key id (never put the key secret in this file)
+  rzpKey: 'rzp_test_U4j2mhPmmR6I2Q',   // Razorpay TEST key id (never put the key secret in this file)
   pin: '1234',
   demo: false,
   slots: [
@@ -983,7 +983,7 @@ function load() {
     const s = JSON.parse(localStorage.getItem(STORE) || localStorage.getItem(OLD_STORE));
     if (s && s.slots && s.slots.length === 3) {
       const c = Object.assign({}, DEFAULTS, s);
-      if (!c.rzpKey || c.rzpKey.includes('XXXX')) c.rzpKey = DEFAULTS.rzpKey;
+      if (!c.rzpKey || c.rzpKey.includes('XXXX') || c.rzpKey === 'rzp_test_Totpq5PafGbvql') c.rzpKey = DEFAULTS.rzpKey;
       c.slots.forEach((o, i) => { if (o.open === 90 && o.close === 0) { o.open = DEFAULTS.slots[i].open; o.close = DEFAULTS.slots[i].close; } });
       // settings saved before languages existed: fill in the built-in Telugu/Hindi names if the product is still the default one
       c.slots.forEach((o, i) => { const d = DEFAULTS.slots[i]; if (o.name === d.name) TR_KEYS.forEach(k => { if (o[k] === undefined) o[k] = d[k]; }); });
